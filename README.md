@@ -1,1 +1,1 @@
-"# Lumahni - React Native Application" 
+# Lumahni - React Native Application
