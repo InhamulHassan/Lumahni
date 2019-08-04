@@ -1,16 +1,26 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { StyleSheet } from "react-native";
 
-export const HomeView = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-`;
-
-export const HomeText = styled.Text`
-  color: palevioletred;
-`;
-
-export const HomeButton = styled.Button`
-  color: black;
-`;
+export default StyleSheet.create({
+  rootView: {
+    flex: 1,
+    paddingTop: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff"
+  },
+  menuIcon: {
+    paddingLeft: 10
+  },
+  iconContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: 120
+  },
+  homeText: {
+    color: "#000000"
+  },
+  errorText: {
+    color: "#ff6961"
+  }
+});

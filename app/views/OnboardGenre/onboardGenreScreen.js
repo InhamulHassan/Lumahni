@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { GenreView, GenreText } from "./styles";
 import { ActivityIndicator, Text } from "react-native";
-import GenreToggle from "../../components/GenreToggleCard";
+import GenreToggleCard from "../../components/GenreToggleCard";
 import { FlatGrid } from "react-native-super-grid";
-import { getGenre } from "../../redux/actions/genreAction";
+import { getGenres } from "../../redux/actions/genreDbAction";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { DEVELOPMENT_SERVER_URL } from "react-native-dotenv";
@@ -19,29 +19,23 @@ class OnboardGenreScreen extends Component<Props> {
   }
 
   componentDidMount() {
-    this.props.getGenre();
+    this.props.getGenres();
   }
 
   render() {
-    const { genre, loading, error } = this.props;
+    const { genres, loading, error } = this.props;
+    console.log(JSON.stringify(genres))
     return (
       <GenreView>
-        {/* <GenreToggle
-          text="Click"
-          textColor="#01d1e5"
-          backgroundColor="lavenderblush"
-          imgSrc={require("../../assets/images/art-genre.jpg")}
-        /> */}
-        {/* <GenreToggle /> */}
-        {loading === true ? (
+        {!!loading ? (
           <ActivityIndicator size="large" />
         ) : (
           <FlatGrid
             itemDimension={100}
-            items={genre}
+            items={genres}
             renderItem={({ item }) => {
               return (
-                <GenreToggle
+                <GenreToggleCard
                   text={item.name}
                   imgSrc={{
                     uri: `${DEVELOPMENT_SERVER_URL}/assets/images/${
@@ -59,20 +53,20 @@ class OnboardGenreScreen extends Component<Props> {
 }
 
 OnboardGenreScreen.propTypes = {
-  getGenre: PropTypes.func.isRequired,
-  genre: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
+  getGenres: PropTypes.func.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
 };
 
 const mapStateToProps = state => {
   return {
-    genre: state.data,
-    loading: state.dataLoading,
-    error: state.error
+    genres: state.genre.data,
+    loading: state.genre.dataLoading,
+    error: state.genre.error
   };
 };
 
 const mapDispatchToProps = {
-  getGenre
+  getGenres
 };
 
 export default connect(

@@ -13,7 +13,7 @@ const initialState = {
   error: ""
 };
 
-const genreReducer = (state = initialState, action) => {
+const genreDbReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_GENRES_PENDING:
       return {
@@ -37,4 +37,4 @@ const genreReducer = (state = initialState, action) => {
   }
 };
 
-export default genreReducer;
+export default genreDbReducer;

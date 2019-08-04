@@ -9,7 +9,6 @@ import {
   Overlay
 } from "./styles";
 import PropTypes from "prop-types";
-import accents from "../../config/accents";
 
 export default class GenreToggleCard extends Component {
   state = {
@@ -44,7 +43,7 @@ export default class GenreToggleCard extends Component {
     textColor: "white",
     backgroundColor: "grey",
     imgSrc: require("../../assets/images/art-genre.jpg"),
-    opaqueGradient: ["#be52f2", "#dba5f5", "#eedff2"],
+    opaqueGradient: ["#be52f2", "#dba5f5", "#eedff2"]
   };
 
   toggleOn() {
@@ -57,11 +56,6 @@ export default class GenreToggleCard extends Component {
 
   toggleGenre() {
     this.state.isGenreSelected ? this.toggleOff() : this.toggleOn();
-  }
-
-  getRandomAccent(obj) {
-    let keys = Object.keys(obj);
-    return obj[keys[(keys.length * Math.random()) << 0]];
   }
 
   render() {
@@ -88,7 +82,7 @@ export default class GenreToggleCard extends Component {
           {imgSrc && <Image source={imgSrc} />}
           {!this.state.isGenreSelected && (
             <Overlay
-              colors={opaqueGradient.accent}
+              colors={opaqueGradient}
               start={{ x: 0, y: 1 }}
               end={{ x: 1, y: 0 }}
             />

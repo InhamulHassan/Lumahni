@@ -6,7 +6,7 @@ export default class GenreScreen extends Component<Props> {
   render() {
     return (
         <GenreView>
-            <GenreText>Author</GenreText>
+            <GenreText>Genre</GenreText>
         </GenreView>
     );
   }
