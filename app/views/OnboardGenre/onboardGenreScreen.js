@@ -1,21 +1,16 @@
 import React, { Component } from "react";
-import { GenreView, GenreText } from "./styles";
-import { ActivityIndicator, Text } from "react-native";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
+import { ActivityIndicator, View, Text } from "react-native";
 import GenreToggleCard from "../../components/GenreToggleCard";
 import { FlatGrid } from "react-native-super-grid";
 import { getGenres } from "../../redux/actions/genreDbAction";
-import { connect } from "react-redux";
-import { PropTypes } from "prop-types";
-import { DEVELOPMENT_SERVER_URL } from "react-native-dotenv";
+import styles from "./styles";
 
 class OnboardGenreScreen extends Component<Props> {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: false,
-      genre: [],
-      error: ""
-    };
+
   }
 
   componentDidMount() {
@@ -24,30 +19,22 @@ class OnboardGenreScreen extends Component<Props> {
 
   render() {
     const { genres, loading, error } = this.props;
-    console.log(JSON.stringify(genres))
     return (
-      <GenreView>
-        {!!loading ? (
+      <View style={styles.genreView}>
+        {error ? (
+          <Text style={styles.errorText}>{error.message || ""}</Text>
+        ) : loading ? (
           <ActivityIndicator size="large" />
         ) : (
           <FlatGrid
             itemDimension={100}
             items={genres}
             renderItem={({ item }) => {
-              return (
-                <GenreToggleCard
-                  text={item.name}
-                  imgSrc={{
-                    uri: `${DEVELOPMENT_SERVER_URL}/assets/images/${
-                      item.img_s
-                    }.jpg`
-                  }}
-                />
-              );
+              return <GenreToggleCard text={item.name} imgUrl={item.img_m} />;
             }}
           />
         )}
-      </GenreView>
+      </View>
     );
   }
 }

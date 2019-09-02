@@ -6,7 +6,7 @@ import {
   } from "../actions/types";
   
   const initialState = {
-    dataLoading: false,
+    dataLoading: true,
     bookDetails: {},
     error: ""
   };
@@ -33,7 +33,7 @@ import {
       case GET_BOOK_BY_GRID_RESET:
         return {
           ...state,
-          dataLoading: true, //changed
+          dataLoading: false, //changed
           bookDetails: {},
           error: ""
         };

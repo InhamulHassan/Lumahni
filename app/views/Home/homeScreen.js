@@ -1,25 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styles from "./styles";
-import { NavigationScreenProps, NavigationEvents } from "react-navigation";
 import PropTypes from "prop-types";
+import { NavigationScreenProps, NavigationEvents } from "react-navigation";
 import { ActivityIndicator, Text, StyleSheet, View } from "react-native";
+import { Button, Icon } from "react-native-elements";
 import { FlatGrid } from "react-native-super-grid";
 import { getBooks, resetGetBooks } from "../../redux/actions/bookDbAction";
 import BookCard from "../../components/BookCard";
-import ButtonIcon from "../../components/ButtonIcon";
-import Icon from "../../components/Icon";
+import styles from "./styles";
 
 class HomeScreen extends Component {
   componentDidMount() {
-    // console.log('Home Screen Did Mount');
     this.props.getBooks();
   }
 
-  // componentWillUnmount() {
-  //   console.log('Home Screen Will Unmount');
-  //   this.props.resetGetBooks();
-  // }
+  componentWillUnmount() {
+    this.props.resetGetBooks();
+  }
 
   static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
     headerTitle: "Home",
@@ -58,7 +55,7 @@ class HomeScreen extends Component {
     const { books, loading, error, navigation } = this.props;
 
     if (loading) {
-      return <ActivityIndicator />;
+      return <ActivityIndicator size="large" />;
     }
 
     if (error) {
@@ -75,9 +72,10 @@ class HomeScreen extends Component {
       <FlatGrid
         itemDimension={100}
         items={books}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
           return (
             <BookCard
+              key={index}
               book={item}
               onPress={() =>
                 navigation.navigate("BookScreen", {
@@ -93,12 +91,22 @@ class HomeScreen extends Component {
   };
 
   render() {
-    const { books, loading, error, getBooks, resetGetBooks, navigation } = this.props;
+    const {
+      books,
+      loading,
+      error,
+      getBooks,
+      resetGetBooks,
+      navigation
+    } = this.props;
     return (
       <View style={styles.rootView}>
         {/* <NavigationEvents
           onWillFocus={getBooks}
-          onWillBlur={resetGetBooks}
+        /> */}
+        {/* <NavigationEvents
+          onWillFocus={this._getBooks}
+          onWillBlur={this._resetGetBooks}
         /> */}
         {/* <HomeText>I am home</HomeText>
         <HomeButton

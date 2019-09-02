@@ -1,8 +1,14 @@
 import React, { Component } from "react";
-import { Image, Text, TouchableHighlight, View } from "react-native";
-import styles from "./styles";
+import {
+  ActivityIndicator,
+  Text,
+  TouchableHighlight,
+  View
+} from "react-native";
+import { Image } from "react-native-elements";
 import PropTypes from "prop-types";
 import ElevatedView from "react-native-elevated-view";
+import styles from "./styles";
 
 export default class BookCard extends Component {
   static propTypes = {
@@ -28,7 +34,7 @@ export default class BookCard extends Component {
       bookObject = {
         title: book.title,
         img_url: book.img,
-        author: ""
+        author: book.authors ? book.authors[0].name : ""
       };
     } else if (Object.keys(bookGr).length > 0) {
       bookObject = {
@@ -54,7 +60,11 @@ export default class BookCard extends Component {
         <View style={styles.viewContainer}>
           <ElevatedView elevation={3} style={styles.bookImageWrapper}>
             {bookObject.img_url && (
-              <Image style={styles.bookImage} source={{ uri: bookObject.img_url }} />
+              <Image
+                style={styles.bookImage}
+                source={{ uri: bookObject.img_url }}
+                PlaceholderContent={<ActivityIndicator />}
+              />
             )}
           </ElevatedView>
           <Text style={styles.bookTitle}>{bookObject.title}</Text>

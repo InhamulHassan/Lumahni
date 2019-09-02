@@ -1,4 +1,3 @@
-import styled, { css } from "styled-components";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({

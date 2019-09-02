@@ -1,12 +1,13 @@
-import styled from "styled-components";
+import { StyleSheet } from "react-native";
 
-export const GenreView = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-`;
-
-export const GenreText = styled.Text`
-  color: palevioletred;
-`;
+export default StyleSheet.create({
+  genreView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff"
+  },
+  errorText: {
+    color: "#ff6961"
+  }
+});

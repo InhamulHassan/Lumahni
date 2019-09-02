@@ -1,14 +1,16 @@
 import React, { Component } from "react";
-import { TouchableOpacity } from "react-native";
-import styled from "styled-components";
-import {
-  ButtonContainerStyles,
-  GenreText,
-  GenreImage,
-  Image,
-  Overlay
-} from "./styles";
 import PropTypes from "prop-types";
+import { TouchableOpacity } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Text,
+  TouchableHighlight
+} from "react-native";
+// import { Image } from "react-native-elements";
+import ElevatedView from "react-native-elevated-view";
+import LinearGradient from "react-native-linear-gradient";
+import styles from "./styles";
 
 export default class GenreToggleCard extends Component {
   state = {
@@ -17,81 +19,58 @@ export default class GenreToggleCard extends Component {
 
   static propTypes = {
     text: PropTypes.string.isRequired,
-    textColor: PropTypes.string.isRequired,
-    backgroundColor: PropTypes.string.isRequired,
-    imgSrc: PropTypes.oneOfType([
-      PropTypes.shape({
-        uri: PropTypes.string,
-        headers: PropTypes.objectOf(PropTypes.string)
-      }),
-      PropTypes.number,
-      PropTypes.arrayOf(
-        PropTypes.shape({
-          uri: PropTypes.string,
-          width: PropTypes.number,
-          height: PropTypes.number,
-          headers: PropTypes.objectOf(PropTypes.string)
-        })
-      )
-    ]).isRequired,
-    opaqueGradient: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    ...TouchableOpacity.propTypes
+    textColor: PropTypes.string,
+    imgUrl: PropTypes.string.isRequired,
+    opaqueGradient: PropTypes.arrayOf(PropTypes.string.isRequired)
   };
 
   static defaultProps = {
     text: "Genre",
-    textColor: "white",
-    backgroundColor: "grey",
-    imgSrc: require("../../assets/images/art-genre.jpg"),
+    textColor: "#ffffff",
     opaqueGradient: ["#be52f2", "#dba5f5", "#eedff2"]
   };
 
-  toggleOn() {
+  toggleOn = () => {
     this.setState({ isGenreSelected: true });
-  }
+  };
 
-  toggleOff() {
+  toggleOff = () => {
     this.setState({ isGenreSelected: false });
-  }
+  };
 
-  toggleGenre() {
+  toggleGenre = () => {
     this.state.isGenreSelected ? this.toggleOff() : this.toggleOn();
-  }
+  };
 
   render() {
-    const {
-      text,
-      textColor,
-      backgroundColor,
-      imgSrc,
-      opaqueGradient,
-      ...otherProps
-    } = this.props;
-
-    const ButtonContainer = styled.TouchableOpacity`
-      ${ButtonContainerStyles}
-    `;
+    const { text, textColor, imgUrl, opaqueGradient } = this.props;
 
     return (
-      <ButtonContainer
-        onPress={() => this.toggleGenre()}
-        backgroundColor={backgroundColor}
-        {...otherProps}
+      <TouchableHighlight
+        activeOpacity={0.9}
+        onPress={this.toggleGenre}
+        underlayColor={"#ffffff"}
+        style={styles.genreContainer}
       >
-        <GenreImage>
-          {imgSrc && <Image source={imgSrc} />}
-          {!this.state.isGenreSelected && (
-            <Overlay
-              colors={opaqueGradient}
-              start={{ x: 0, y: 1 }}
-              end={{ x: 1, y: 0 }}
-            />
+        <ElevatedView elevation={3} style={styles.genreWrapper}>
+          {imgUrl && (
+            <Image source={{ uri: imgUrl }} style={styles.genreImage} />
           )}
-        </GenreImage>
-        <GenreText textColor={textColor}>
-          {this.state.isGenreSelected ? text : text}
-        </GenreText>
-      </ButtonContainer>
+          <LinearGradient
+            colors={opaqueGradient}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 0 }}
+            style={
+              this.state.isGenreSelected
+                ? styles.gradientOverlaySelected
+                : styles.gradientOverlay
+            }
+          />
+          <Text textColor={textColor} style={styles.genreText}>
+            {this.state.isGenreSelected ? text : text}
+          </Text>
+        </ElevatedView>
+      </TouchableHighlight>
     );
   }
 }

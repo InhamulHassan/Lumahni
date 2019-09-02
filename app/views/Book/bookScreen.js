@@ -1,20 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styles from "./styles";
+import PropTypes from "prop-types";
+import { NavigationScreenProps, NavigationEvents } from "react-navigation";
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   Text,
   TouchableOpacity,
   ScrollView,
   View
 } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { Image } from "react-native-elements";
+import ElevatedView from "react-native-elevated-view";
+import ViewMoreText from "react-native-view-more-text";
 import BookCard from "../../components/BookCard";
-import { NavigationScreenProps } from "react-navigation";
-import PropTypes from "prop-types";
+import LinearGradient from "react-native-linear-gradient";
 import {
+  getBooks,
   getBookById,
   resetGetBookById
 } from "../../redux/actions/bookDbAction";
@@ -22,8 +24,7 @@ import {
   getBookByGrId,
   resetGetBookByGrId
 } from "../../redux/actions/bookGrAction";
-import ElevatedView from "react-native-elevated-view";
-import ViewMoreText from "react-native-view-more-text";
+import styles from "./styles";
 
 const { width } = Dimensions.get("window");
 const optionWith = (width - 0) / 3 - 10;
@@ -32,8 +33,8 @@ class BookScreen extends Component<Props> {
   componentDidMount() {
     const { navigation, getBookById, getBookByGrId } = this.props;
     // get the book_id/book_grid from the navigation props, and give it a fallback value if the value is undefined
-    getBookById(navigation.getParam("bookId", "1"));
     getBookByGrId(navigation.getParam("bookGrid", "1"));
+    getBookById(navigation.getParam("bookId", "1"));
   }
 
   componentWillUnmount() {
@@ -190,7 +191,7 @@ class BookScreen extends Component<Props> {
             showsVerticalScrollIndicator={false}
             // Snap interval to stop at option edges
             snapToInterval={optionWith}
-            style={styles.similarBooksScroll}
+            contentContainerStyle={styles.similarBooksScroll}
           >
             {similar_books.map((book, index) => (
               <BookCard key={index} bookGr={book} />
@@ -206,6 +207,7 @@ class BookScreen extends Component<Props> {
       bookDetails,
       loading,
       error,
+      getBooks,
       navigation,
       bookGrDetails,
       bookGrLoading,
@@ -214,6 +216,9 @@ class BookScreen extends Component<Props> {
 
     return (
       <View style={styles.rootView}>
+        {/* <NavigationEvents
+          onWillBlur={getBooks}
+        /> */}
         {error || bookGrError ? (
           <Text style={styles.errorText}>
             {error.message || bookGrError.message || ""}
@@ -222,7 +227,7 @@ class BookScreen extends Component<Props> {
           <ScrollView contentContainerStyle={styles.scrollView}>
             {loading || bookGrLoading ? (
               <View style={styles.rootView}>
-                <ActivityIndicator />
+                <ActivityIndicator size="large" />
               </View>
             ) : (
               <View>
@@ -232,6 +237,7 @@ class BookScreen extends Component<Props> {
                       <Image
                         style={styles.bookImage}
                         source={{ uri: bookDetails.img }}
+                        PlaceholderContent={<ActivityIndicator />}
                       />
                     )}
                   </ElevatedView>
@@ -320,6 +326,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
+  getBooks,
   getBookById,
   resetGetBookById,
   getBookByGrId,

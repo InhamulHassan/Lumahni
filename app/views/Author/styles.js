@@ -50,13 +50,11 @@ export default StyleSheet.create({
     color: "#000000"
   },
   authorBioContainer: {
-    position: "relative",
-    top: 35,
     width: "90%",
-    height: "auto",
     minHeight: 150,
     marginLeft: "5%",
-    bottom: 80
+    marginTop: 110,
+    marginBottom: 40
   },
   authorBioText: {
     fontSize: 13,
@@ -88,13 +86,15 @@ export default StyleSheet.create({
   },
   favouriteButtonGradient: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-around",
+    alignItems: "center",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 13
   },
   favouriteIcon: {
-    paddingLeft: 10
+    paddingLeft: 10,
+    paddingRight: 5
   },
   favouriteButtonText: {
     fontSize: 16,

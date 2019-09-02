@@ -1,20 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styles from "./styles";
+import { NavigationScreenProps } from "react-navigation";
+import PropTypes from "prop-types";
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   Text,
   TouchableHighlight,
   ScrollView,
   View
 } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { Image } from "react-native-elements";
 import BookCard from "../../components/BookCard";
-import Icon from "../../components/Icon";
-import { NavigationScreenProps } from "react-navigation";
-import PropTypes from "prop-types";
+import { Icon } from "react-native-elements";
+import ElevatedView from "react-native-elevated-view";
+import ViewMoreText from "react-native-view-more-text";
+import LinearGradient from "react-native-linear-gradient";
 import {
   getAuthorById,
   resetGetAuthorById
@@ -23,18 +24,25 @@ import {
   getAuthorByGrId,
   resetGetAuthorByGrId
 } from "../../redux/actions/authorGrAction";
-import ElevatedView from "react-native-elevated-view";
-import ViewMoreText from "react-native-view-more-text";
+import styles from "./styles";
 
 const { width } = Dimensions.get("window");
 const optionWith = (width - 0) / 3 - 10;
 
 class AuthorScreen extends Component<Props> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      highlightStatus: false
+    };
+  }
+
   componentDidMount() {
     const { navigation, getAuthorById, getAuthorByGrId } = this.props;
     // get the author_id/author_grid from the navigation props, and give it a fallback value if the value is undefined
-    getAuthorById(navigation.getParam("authorId", "1"));
     getAuthorByGrId(navigation.getParam("authorGrid", "1"));
+    getAuthorById(navigation.getParam("authorId", "1"));
   }
 
   componentWillUnmount() {
@@ -58,28 +66,6 @@ class AuthorScreen extends Component<Props> {
       <Text style={styles.authorBioMore} onPress={onPress}>
         View less
       </Text>
-    );
-  };
-
-  renderAuthors = () => {
-    const { bookDetails } = this.props;
-    if (!Object.keys(bookDetails).length > 0) return null;
-
-    if (!bookDetails) return null;
-
-    const length = Object.keys(bookDetails.authors).length;
-
-    return (
-      <View style={styles.authorGroup}>
-        {bookDetails.authors.map((author, index) => (
-          <View style={styles.authorContainer} key={author.id}>
-            <Text style={styles.authorName}>
-              {author.name}
-              {index < length - 1 ? ", " : ""}
-            </Text>
-          </View>
-        ))}
-      </View>
     );
   };
 
@@ -107,8 +93,6 @@ class AuthorScreen extends Component<Props> {
 
   renderAuthorBooks() {
     const { authorGrDetails, authorGrLoading, authorGrError } = this.props;
-
-    console.log("render - " + JSON.stringify(authorGrDetails.author));
 
     if (!Object.keys(authorGrDetails).length > 0) return null;
 
@@ -148,7 +132,7 @@ class AuthorScreen extends Component<Props> {
             showsVerticalScrollIndicator={false}
             // Snap interval to stop at option edges
             snapToInterval={optionWith}
-            style={styles.similarBooksScroll}
+            contentContainerStyle={styles.similarBooksScroll}
           >
             {books.map((book, index) => (
               <BookCard key={index} authorBookGr={book} />
@@ -158,6 +142,13 @@ class AuthorScreen extends Component<Props> {
       );
     }
   }
+
+  onHideUnderlay = () => {
+    this.setState({ highlightStatus: false });
+  };
+  onShowUnderlay = () => {
+    this.setState({ highlightStatus: true });
+  };
 
   render() {
     const {
@@ -180,7 +171,7 @@ class AuthorScreen extends Component<Props> {
           <ScrollView contentContainerStyle={styles.scrollView}>
             {loading || authorGrLoading ? (
               <View style={styles.rootView}>
-                <ActivityIndicator />
+                <ActivityIndicator size="large" />
               </View>
             ) : (
               <View>
@@ -190,6 +181,7 @@ class AuthorScreen extends Component<Props> {
                       <Image
                         style={styles.authorImage}
                         source={{ uri: authorDetails.img_l }}
+                        PlaceholderContent={<ActivityIndicator />}
                       />
                     )}
                   </ElevatedView>
@@ -204,7 +196,10 @@ class AuthorScreen extends Component<Props> {
                   <TouchableHighlight
                     style={styles.favouriteButtonContainer}
                     activeOpacity={0.5}
+                    underlayColor="#ffffff"
                     onPress={() => {}}
+                    onHideUnderlay={this.onHideUnderlay}
+                    onShowUnderlay={this.onShowUnderlay}
                   >
                     <LinearGradient
                       colors={["#FF647C", "#FDAFBB"]}
@@ -213,8 +208,8 @@ class AuthorScreen extends Component<Props> {
                       style={styles.favouriteButtonGradient}
                     >
                       <Icon
-                        name="favorite-border"
-                        size={18}
+                        name={this.state.highlightStatus ? "favorite" : "favorite-border"}
+                        size={16}
                         color="#ffffff"
                         type="ionicons"
                         containerStyle={styles.favouriteIcon}

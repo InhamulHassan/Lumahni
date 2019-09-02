@@ -6,7 +6,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  dataLoading: false,
+  dataLoading: true,
   authorDetails: {},
   error: ""
 };

@@ -3,8 +3,7 @@ import styles from "./styles";
 import React, { PureComponent } from "react";
 import { SafeAreaViewStyled, Button } from "./styles";
 import { ScrollView } from "react-native";
-import Icon from "../Icon";
-// import { Button } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import {
   DrawerItems,
   NavigationInjectedProps,
